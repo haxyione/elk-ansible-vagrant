@@ -1,0 +1,33 @@
+---
+#
+# Install Kibana
+#
+- name: Add Kibana repo
+  apt_repository:
+    repo: "deb https://artifacts.elastic.co/packages/5.x/apt stable main"
+    state: present
+
+- name: Update repos cache and install Kibana 
+  apt:
+    name: kibana
+    update_cache: yes
+ 
+- name: Update Kibana config
+  lineinfile:
+    destfile: /etc/kibana/kibana.yml
+    regexp: 'server.host:'
+    line: 'server.host: localhost'
+  
+- name: Enable Kibana service
+  systemd:
+    name: kibana
+    enabled: yes
+    daemon_reload: yes
+- name: Start service
+  systemd:
+    name: kibana
+    state: started
+
+
+
+
